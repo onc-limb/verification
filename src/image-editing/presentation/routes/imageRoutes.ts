@@ -1,5 +1,5 @@
 import { Router } from "express";
-import * as multer from "multer";
+import multer from "multer";
 import { ImageController } from "../controllers/ImageController";
 
 const SUPPORTED_MIME_TYPES = ["image/jpeg", "image/png"] as const;

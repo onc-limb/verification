@@ -1,6 +1,6 @@
-import type { Request, Response } from "express";
-const fs = require("fs").promises;
-const path = require("path");
+import { Request, Response } from "express";
+import { promises as fs } from "fs";
+import path from "path";
 
 export class ImageController {
   constructor() {}
@@ -106,27 +106,17 @@ export class ImageController {
         return;
       }
 
-      // Read from image.json file
-      const jsonFilePath = path.join(__dirname, "../../../image.json");
+      // データベースが未作成のため、仮データを返却
+      // 小さなサンプル画像のbase64データ（1x1 PNG）
+      const sampleImageBase64 = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==";
+      
+      const imageData = {
+        image_data: sampleImageBase64,
+        mime_type: "image/png",
+        id: id
+      };
 
-      let existingData = [];
-      try {
-        const fileContent = await fs.readFile(jsonFilePath, "utf8");
-        existingData = JSON.parse(fileContent);
-      } catch (error) {
-        // File doesn't exist or is empty
-        res.status(404).json({ error: "Image not found" });
-        return;
-      }
-
-      const image = existingData.find((img: any) => img.id === id);
-
-      if (!image) {
-        res.status(404).json({ error: "Image not found" });
-        return;
-      }
-
-      res.json(image);
+      res.json(imageData);
     } catch (error) {
       console.error("Error getting image:", error);
       res.status(500).json({ error: "Internal server error" });
